@@ -90,7 +90,6 @@ var wsm_comm = {
 	storeCurrentView : function ( arr ) {
 		var me = this ;
 		var s = JSON.stringify ( arr ) ;
-if ( this.is_app ) alert ( s ) ;
 		me.storeKey ( 'last_view_params' , s ) ;
 	} ,
 	
