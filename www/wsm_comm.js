@@ -13,11 +13,7 @@ var wsm_comm = {
 	
 	getWSM : function ( params , callback ) {
 		var me = this ;
-		if ( me.is_app ) {
-			$.getJSON ( me.api_v3+'?callback=?' , params , callback ) ;
-		} else {
-			$.getJSON ( me.api_v3+'?callback=?' , params , callback ) ;
-		}
+		$.getJSON ( me.api_v3+'?callback=?' , params , callback ) ;
 	} ,
 
 	getFlinfo : function ( params , callback ) {
@@ -66,6 +62,34 @@ var wsm_comm = {
 				callback() ;
 			} ) ;
 		}
+	} ,
+	
+	storeKey : function ( key , value ) {
+		var storage = window.localStorage;
+		storage.setItem ( key , value ) ;
+	} ,
+	
+	removeKey : function ( key ) {
+		var storage = window.localStorage;
+		storage.removeItem ( key ) ;
+	} ,
+
+	getValue : function ( key ) {
+		var storage = window.localStorage;
+		return storage.getItem(key);
+	} ,
+	
+	hasKey : function ( key ) {
+		var storage = window.localStorage;
+		var value = this.getValue ( key ) ;
+		return typeof value != 'undefined' ;
+	} ,
+	
+	storeCurrentView : function ( arr ) {
+		var me = this ;
+		var s = JSON.stringify ( arr ) ;
+if ( this.is_app ) alert ( s ) ;
+		me.storeKey ( 'last_view_params' , s ) ;
 	} ,
 	
 	

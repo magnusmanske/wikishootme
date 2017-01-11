@@ -24,7 +24,7 @@
 
 <script type='text/javascript'>
 $(document).ready ( function () {
-	wsm_comm.is_app = !!window.cordova ;
+	wsm_comm.is_app = typeof navigator.connection != 'undefined' //!!window.cordova ;
 	wikishootme.init() ;
 } ) ;
 
