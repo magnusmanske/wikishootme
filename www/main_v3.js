@@ -633,7 +633,7 @@ var wikishootme = {
 
 		$('#pleaseWaitDialog').modal() ;
 
-		$.get ( '/flickr2commons/flinfo_proxy.php' , params , function ( d ) {
+		wsm_comm.getFlinfo ( params , function ( d ) {
 			if ( undefined === d.wiki || d.wiki.status != 0 ) {
 				var err = "Flinfo: " + d.wiki.status ;
 				console.log ( err ) ;
@@ -740,7 +740,7 @@ var wikishootme = {
 
 		// Load Flickr key, if necessary
 		if ( typeof me.flickr_api_key == 'undefined' ) {
-			$.get ( './flickr.key' , function ( d ) {
+			wsm_comm.getFlickrKey ( function ( d ) {
 				me.flickr_api_key = $.trim(d) ;
 				me.loadFlickrLayer2() ;
 			} ) ;
@@ -977,14 +977,14 @@ var wikishootme = {
 			c.find('div.transfer2flickr').each ( function () { // Flickr transfer function
 				var div = $(this) ;
 				var html_do_upload = "<a href='#' onclick='wikishootme.transferFlickr2Commons(this,\""+div.attr('flickr_id')+"\");return false'>Transfer from Flickr to Commons</a>" ;
-				if ( me.oauth_uploader_login ) {
+				if ( wsm_comm.oauth_uploader_login ) {
 					div.html ( html_do_upload ) ;
 					h = c.html() ;
 					popup.setContent ( h ) ;
 				} else {
 					$.get ( '/magnustools/oauth_uploader.php?action=checkauth&botmode=1' , function ( d ) {
 						if ( d.error == 'OK' ) {
-							me.oauth_uploader_login = true ;
+							wsm_comm.oauth_uploader_login = true ;
 							div.html ( html_do_upload ) ;
 						} else {
 							div.html ( d.error ) ;
@@ -1139,18 +1139,12 @@ var wikishootme = {
 		var query = $('#search_query').val() ;
 		$('#search_results_list').html('') ;
 
-		$.getJSON ( 'https://www.wikidata.org/w/api.php?callback=?' , {
+		wsm_comm.searchWikidata ( {
 			action:'query',
-/*
-			list:'wbsearch',
-			wbssearch:query,
-			wbslimit:25,
-*/
 			list:'search',
 			srsearch:query,
 			srlimit:25,
 			srprop:'',
-
 			format:'json'
 		} , function ( d ) {
 			var qs_all = [] ;
@@ -1187,7 +1181,7 @@ var wikishootme = {
 				} ) ;
 			
 				$.each ( qs , function ( dummy , q ) {
-					$.get ( 'https://tools.wmflabs.org/autodesc' , {
+					wsm_comm.getAutodesc ( {
 						q:q,
 						lang:me.language,
 						mode:'short',

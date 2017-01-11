@@ -15,7 +15,7 @@ function WikiDataItem ( init_wd , init_raw ) {
 	
 	this.getURL = function () {
 		if ( typeof(this.raw) == 'undefined' ) return '' ;
-		var ret = "//www.wikidata.org/wiki/" ;
+		var ret = "https://www.wikidata.org/wiki/" ;
 		ret += this.raw.title ;
 		return ret ;
 	}
@@ -340,7 +340,7 @@ function WikiDataItem ( init_wd , init_raw ) {
 function WikiData () {
 
 	// Variables
-	this.api = '//www.wikidata.org/w/api.php?callback=?' ;
+	this.api = 'https://www.wikidata.org/w/api.php?callback=?' ;
 	this.max_get_entities = 50 ;
 	this.max_get_entities_smaller = 25 ;
 	this.language = 'en' ; // Default
