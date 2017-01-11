@@ -1,5 +1,5 @@
 var wsm_comm = {
-	is_app : false,//document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1 ,
+	is_app : !!window.cordova,//false,//document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1 ,
 	api_v3 : 'https://tools.wmflabs.org/wikishootme/api_v3.php' ,
 	
 	userinfo : {} ,
