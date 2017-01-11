@@ -1,0 +1,19 @@
+{
+  "name": "wikishootme",
+  "version": "1.0.0",
+  "description": "Find Wikidata items that could use a picture, and upload it directly from your phone to Wikimedia Commons!",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/magnusmanske/wikishootme.git"
+  },
+  "author": "Magnus Manske",
+  "license": "Apache-2.0",
+  "keywords": [
+    "ecosystem:phonegap",
+    "ecosystem:cordova"
+  ],
+  "bugs": {
+    "url": "https://github.com/magnusmanske/wikishootme/issues"
+  },
+  "homepage": "https://github.com/magnusmanske/wikishootme"
+}
