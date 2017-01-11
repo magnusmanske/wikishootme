@@ -1285,6 +1285,9 @@ var wikishootme = {
 			me.show_layers = me.show_layers.sort() ;
 
 			me.show_layers = $.grep ( me.show_layers , function(value) { return value != 'flickr'; }); // Do not show Flickr layer by default
+			if ( wsm_comm.is_app ) { // Only WIkidata by default for app
+				me.show_layers = $.grep ( me.show_layers , function(value) { return value != 'wikipedia' && value != 'commons'; });
+			}
 			me.show_layers = me.show_layers.sort() ;
 			me.full_layers = me.show_layers.join(',') ;
 			
