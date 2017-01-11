@@ -3,6 +3,7 @@ var wsm_comm = {
 	api_v3 : 'https://tools.wmflabs.org/wikishootme/api_v3.php' ,
 	api_autodesc : 'https://tools.wmflabs.org/autodesc' ,
 	api_wikidata : 'https://www.wikidata.org/w/api.php' ,
+	api_commons : 'https://commons.wikimedia.org/w/api.php' ,
 	url_flinfo : 'https://tools.wmflabs.org/flickr2commons/flinfo_proxy.php' ,
 	url_flickr_key : 'https://tools.wmflabs.org/wikishootme/flickr.key' ,
 	
@@ -93,6 +94,29 @@ var wsm_comm = {
 		me.storeKey ( 'last_view_params' , s ) ;
 	} ,
 	
+	commonsLogin : function ( name , pass , callback ) {
+		var me = this ;
+		$.get ( me.api_commons , {
+			action:'query',
+			meta:'tokens',
+			type:'login',
+			format:'json'
+		} , function ( d ) {
+			var token = d.query.tokens.logintoken ; // TODO error handling
+			$.post ( me.api_commons , {
+				action:'login',
+				lgname:name,
+				lgpassword:pass,
+				format:'json'
+			} , function ( d2 ) {
+				alert ( JSON.stringify(d2) ) ;
+				callback ( false ) ;
+			} , 'json' ) ;
+		} , 'json' ) . error ( function () {
+			callback ( false ) ;
+		} ) ;
+	} ,
+	
 	isLoggedIn : function ( callback ) {
 		var me = this ;
 		if ( typeof callback == 'undefined' ) return me.is_logged_in ; // Just checking
@@ -101,23 +125,27 @@ var wsm_comm = {
 		
 		if ( typeof callback != 'undefined' ) {
 			// open dialog and ask for/check login
-			$('#app_login_dialog').modal ( {
-			} ) ;
+			$('#app_login_dialog').modal ( {} ) ;
 			$('#user_login').submit ( function (evt) {
 				evt.preventDefault();
 				var name = $('#user_name').val() ;
 				var pass = $('#user_pass').val() ;
 
-				// TODO verify
-				me.userinfo = { // TODO
-					name:name,
-					groups:[],
-					id:0,
-					rights:[]
-				} ;
-				me.is_logged_in = true ;
-				alert ( name + " pseudo-logged in!" ) ;
-				callback ( me.is_logged_in ) ;
+				me.commonsLogin ( name , pass , function ( d ) {
+					if ( typeof d == 'undefined' ) {
+						alert ( "Login failed" ) ;
+						return ;
+					}
+					me.userinfo = { // TODO
+						name:name,
+						groups:[],
+						id:0,
+						rights:[]
+					} ;
+					me.is_logged_in = true ;
+					alert ( name + " pseudo-logged in!" ) ;
+					callback ( me.is_logged_in ) ;
+				} ) ;
 
 				$('#app_login_dialog').modal('hide') ;
 				return false ;
