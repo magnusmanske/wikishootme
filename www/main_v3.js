@@ -15,8 +15,6 @@ var wikishootme = {
 	sparql_filter:'',
 	language : 'en' ,
 	max_items : 1000 ,
-	userinfo : {} ,
-	is_logged_in : false ,
 	upload_mode:'upload' ,
 	colors : {
 		me:'#888888',
@@ -204,8 +202,8 @@ var wikishootme = {
 		} else if ( entry.mode == 'wikidata' ) { // Wikidata, no image
 		
 			if ( entry.no_image ) {
-			} else if ( me.is_logged_in ) {
-				var desc = "{{Information\n|Description=[[d:" + entry.page + "|" + entry.label + "]]\n|Source=self-made\n|Date=\n|Author=[[User:"+me.userinfo.name+"|]]\n|Permission=\n|other_versions=\n}}\n" ;
+			} else if ( wsm_comm.is_logged_in ) {
+				var desc = "{{Information\n|Description=[[d:" + entry.page + "|" + entry.label + "]]\n|Source=self-made\n|Date=\n|Author=[[User:"+wsm_comm.userinfo.name+"|]]\n|Permission=\n|other_versions=\n}}\n" ;
 				desc += "{{Object location|"+entry.pos[0]+"|"+entry.pos[1]+"}}\n<!--LOC-->\n\n" ;
 				desc += "=={{int:license-header}}==\n{{self|cc-by-sa-3.0}}" ;
 		
@@ -250,7 +248,7 @@ var wikishootme = {
 		
 		h += "<div class='popup_coords'><span class='coordinates'>" + entry.pos[0] + ", " + entry.pos[1] + "</span>" ;
 		h += " <a style='user-select:none' href='http://www.instantstreetview.com/@"+entry.pos[0]+","+entry.pos[1]+",0h,0p,1z' tt_title='streetview' target='_blank'>&#127968;</a>" ;
-		if ( me.is_logged_in ) {
+		if ( wsm_comm.is_logged_in ) {
 			h += " [<a href='#' style='user-select:none' onclick='wikishootme.editCoordinates(this,\""+entry.page+"\","+entry.pos[0]+","+entry.pos[1]+");return false' title='edit coordinates'>e</a>]" ;
 		}
 		h += "</div>" ;
@@ -1360,17 +1358,7 @@ var wikishootme = {
 		} ) ;
 		
 		// Load user status
-		wsm_comm.getWSM ( {
-			action:'check'
-		} , function ( d ) {
-			if ( typeof d.result.error != 'undefined' ) {
-				me.is_logged_in = false ;
-			} else {
-				me.is_logged_in = true ;
-				me.userinfo = d.result.query.userinfo ;
-			}
-			fin() ;
-		} ) ;
+		wsm_comm.checkUserStatus ( function () { fin() } ) ;
 		
 		// Load translation
 		me.tt = new ToolTranslation ( { tool: 'wikishootme' , fallback:'en' , callback : function () {
