@@ -16,5 +16,13 @@
   <author href="https://magnusmanske.de" email="magnusmanske@gmail.com">
       Magnus Manske
   </author>
+  
+  <plugin name="cordova-plugin-geolocation" spec="~2.4.1" />
+  <plugin name="cordova-plugin-camera" spec="~2.3.1" />
+  <plugin name="cordova-plugin-network-information" spec="~1.3.1" />
+  
+  <access origin="*"></access>
+  <allow-intent href="http://*/*" />
+  <allow-intent href="https://*/*" />
 
 </widget>

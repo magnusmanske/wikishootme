@@ -131,7 +131,7 @@ div.popup_section {
 var wikishootme = {
 
 	sparql_url : 'https://query.wikidata.org/bigdata/namespace/wdq/sparql' ,
-	api_v3 : '/wikishootme/api_v3.php' ,
+	api_v3 : 'https://tools.wmflabs.org/wikishootme/api_v3.php' ,
 	check_reason_no_image : false ,
 	zoom_level : 15 ,
 	opacity : 0.5 ,
@@ -375,7 +375,7 @@ var wikishootme = {
 		
 		if ( typeof entry.commonscat != 'undefined' ) {
 			h += "<div class='popup_section'>" ;
-			h += "<a href='//commons.wikimedia.org/wiki/Category:"+escattr(encodeURIComponent(entry.commonscat.replace(/ /g,'_')))+"' target='_blank' title='"+escattr(''+me.tt.t('commons_category'))+"'>"+me.escapeHTML(entry.commonscat)+"</a>" ;
+			h += "<a href='https://commons.wikimedia.org/wiki/Category:"+escattr(encodeURIComponent(entry.commonscat.replace(/ /g,'_')))+"' target='_blank' title='"+escattr(''+me.tt.t('commons_category'))+"'>"+me.escapeHTML(entry.commonscat)+"</a>" ;
 			h += "</div>" ;
 		}
 		
@@ -414,7 +414,7 @@ var wikishootme = {
 		}
 		
 		
-		$.get ( me.api_v3 , {
+		$.getJSON ( me.api_v3+'?callback=?' , {
 			action:'changeCoordinates',
 			coordinates:ret,
 			q:q
@@ -425,7 +425,7 @@ var wikishootme = {
 				var cs = $($($(a).parents('div.popup_coords').get(0)).find('span.coordinates')) ;
 				cs.text ( ret ) ;
 			}
-		} , 'json' ) ;
+		} ) ;
 		return false ;
 	} ,
 
@@ -585,7 +585,7 @@ var wikishootme = {
 		var me = this ;
 		var q = form.find('input[name="q"]').val() ;
 		var image = form.find('input[name="filename"]').val() ;
-		$.get ( me.api_v3 , {
+		$.getJSON ( me.api_v3+'?callback=?' , {
 			action:'addImageToWikidata',
 			image:image,
 			q:q
@@ -595,7 +595,7 @@ var wikishootme = {
 			} else {
 				me.switchItemToImageLayer ( q , image , form ) ;
 			}
-		} , 'json' ) ;
+		} ) ;
 		return false ;
 	} ,
 	
@@ -698,7 +698,7 @@ var wikishootme = {
 		} ;
 	
 	
-		$.post ( '/magnustools/oauth_uploader.php?rand='+Math.random() , params , function ( d ) {
+		$.post ( 'https://tools.wmflabs.org/magnustools/oauth_uploader.php?rand='+Math.random() , params , function ( d ) {
 			$('#pleaseWaitDialog').modal('hide') ;
 			
 			if ( d.error == 'OK' ) {
@@ -767,7 +767,7 @@ var wikishootme = {
 
 		$('#pleaseWaitDialog').modal() ;
 
-		$.get ( '/flickr2commons/flinfo_proxy.php' , params , function ( d ) {
+		$.get ( 'https://tools.wmflabs.org/flickr2commons/flinfo_proxy.php' , params , function ( d ) {
 			if ( undefined === d.wiki || d.wiki.status != 0 ) {
 				var err = "Flinfo: " + d.wiki.status ;
 				console.log ( err ) ;
@@ -1116,7 +1116,7 @@ var wikishootme = {
 					h = c.html() ;
 					popup.setContent ( h ) ;
 				} else {
-					$.get ( '/magnustools/oauth_uploader.php?action=checkauth&botmode=1' , function ( d ) {
+					$.get ( 'https://tools.wmflabs.org/magnustools/oauth_uploader.php?action=checkauth&botmode=1' , function ( d ) {
 						if ( d.error == 'OK' ) {
 							me.oauth_uploader_login = true ;
 							div.html ( html_do_upload ) ;
@@ -1182,7 +1182,7 @@ var wikishootme = {
 		if ( label == null || label == '' ) return ;
 		
 		me.getAdminUnit ( o.pos.lat , o.pos.lng , function ( p131 ) {
-			$.get ( me.api_v3 , {
+			$.getJSON ( me.api_v3+'?callback=?' , {
 				action:'new_item',
 				lat:o.pos.lat,
 				lng:o.pos.lng,
@@ -1197,7 +1197,7 @@ var wikishootme = {
 				}
 				var marker = me.addNewWikidataItem ( d.q , label , o.pos , o.image ) ;
 				marker.openPopup() ;
-			} , 'json' ) ;
+			} ) ;
 		} ) ;
 	} ,
 	
@@ -1492,7 +1492,7 @@ var wikishootme = {
 		} ) ;
 		
 		// Load user status
-		$.get ( me.api_v3 , {
+		$.getJSON ( me.api_v3+'?callback=?' , {
 			action:'check'
 		} , function ( d ) {
 			if ( typeof d.result.error != 'undefined' ) {
@@ -1502,7 +1502,7 @@ var wikishootme = {
 				me.userinfo = d.result.query.userinfo ;
 			}
 			fin() ;
-		} , 'json' ) ;
+		} ) ;
 		
 		// Load translation
 		me.tt = new ToolTranslation ( { tool: 'wikishootme' , fallback:'en' , callback : function () {
@@ -1525,7 +1525,7 @@ $(document).ready ( function () {
 {
 var m = window.location.href.match(/\?(.+)$/) ;
 if ( m != null  ) {
-	var url = '/wikishootme/#' + m[1].replace(/\#/,'&') ;
+	var url = 'https://tools.wmflabs.org/wikishootme/#' + m[1].replace(/\#/,'&') ;
 	window.location.href = url ;
 }
 }
