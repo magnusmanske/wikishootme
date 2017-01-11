@@ -1,5 +1,5 @@
 var wsm_comm = {
-	is_app : document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1 ,
+	is_app : false,//document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1 ,
 	api_v3 : 'https://tools.wmflabs.org/wikishootme/api_v3.php' ,
 	
 	userinfo : {} ,
@@ -10,7 +10,7 @@ var wsm_comm = {
 		var me = this ;
 		if ( me.is_app ) {
 			$.getJSON ( me.api_v3+'?callback=?' , params , callback ) ;
-			alert ( "APP TEST: " + document.URL ) ;
+//			alert ( "APP TEST: " + document.URL ) ;
 		} else {
 			$.getJSON ( me.api_v3+'?callback=?' , params , callback ) ;
 		}
