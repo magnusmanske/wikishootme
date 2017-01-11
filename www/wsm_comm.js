@@ -107,6 +107,7 @@ var wsm_comm = {
 				action:'login',
 				lgname:name,
 				lgpassword:pass,
+				lgtoken:token,
 				format:'json'
 			} , function ( d2 ) {
 				alert ( JSON.stringify(d2) ) ;
