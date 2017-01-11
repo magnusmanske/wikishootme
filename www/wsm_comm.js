@@ -93,6 +93,47 @@ var wsm_comm = {
 		me.storeKey ( 'last_view_params' , s ) ;
 	} ,
 	
+	isLoggedIn : function ( callback ) {
+		var me = this ;
+		if ( typeof callback == 'undefined' ) return me.is_logged_in ; // Just checking
+		if ( !me.is_app ) return me.is_logged_in ; // Web browsed: We've already checked
+		if ( me.is_logged_in ) return true ; // Yes we are!
+		
+		if ( typeof callback != 'undefined' ) {
+			// open dialog and ask for/check login
+			$('#app_login_dialog').modal ( {
+			} ) ;
+			$('#user_login').submit ( function (evt) {
+				evt.preventDefault();
+				var name = $('#user_name').val() ;
+				var pass = $('#user_pass').val() ;
+
+				// TODO verify
+				me.userinfo = { // TODO
+					name:name,
+					groups:[],
+					id:0,
+					rights:[]
+				} ;
+				me.is_logged_in = true ;
+				alert ( name + " pseudo-logged in!" ) ;
+				callback ( me.is_logged_in ) ;
+
+				$('#app_login_dialog').modal('hide') ;
+				return false ;
+			} ) ;
+		}
+		
+		return false ;
+	} ,
+	
+	appLogin : function () {
+		this.isLoggedIn ( function ( is_logged_in ) {
+			if ( is_logged_in ) wikishootme.updateLayers() ;
+		} ) ;
+		return false ;
+	} ,
+	
 	
 	fin : true
 }

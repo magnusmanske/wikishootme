@@ -48,6 +48,9 @@
 #search_dialog {
 	display:none;
 }
+#app_login_dialog {
+	display:none;
+}
 #sparql_filter_dialog {
 	display:none;
 }
