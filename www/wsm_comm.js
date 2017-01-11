@@ -49,6 +49,8 @@ var wsm_comm = {
 		
 		if ( me.is_app ) {
 			// TODO
+			me.is_logged_in = false ;
+			callback() ;
 		} else {
 			me.getWSM ( {
 				action:'check'
