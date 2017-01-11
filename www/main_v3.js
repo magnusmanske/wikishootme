@@ -1149,6 +1149,7 @@ var wikishootme = {
 		} , function ( d ) {
 			var qs_all = [] ;
 			$.each ( d.query.search , function ( k , v ) { qs_all.push ( v.title ) } ) ;
+if ( wsm_comm.is_app ) alert ( "Stage 1: " + qs_all.length ) ;
 			
 			me.wd.getItemBatch ( qs_all , function () {
 				var qs = [] ;
@@ -1160,6 +1161,7 @@ var wikishootme = {
 					if ( -1 != $.inArray ( 'Q13406463' , p31 ) ) return ; // Bad instance
 					qs.push ( q ) ;
 				} ) ;
+if ( wsm_comm.is_app ) alert ( "Stage 2: " + qs.length ) ;
 				
 				var h = '' ;
 				$.each ( qs , function ( dummy , q ) {

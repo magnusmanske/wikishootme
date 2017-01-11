@@ -1,5 +1,5 @@
 var wsm_comm = {
-	is_app : !!window.cordova,
+	is_app : false,
 	api_v3 : 'https://tools.wmflabs.org/wikishootme/api_v3.php' ,
 	api_autodesc : 'https://tools.wmflabs.org/autodesc' ,
 	api_wikidata : 'https://www.wikidata.org/w/api.php' ,
