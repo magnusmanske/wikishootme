@@ -60,9 +60,19 @@ var wsm_comm = {
 		var me = this ;
 		
 		if ( me.is_app ) {
-			// TODO
-			me.is_logged_in = false ;
-			callback() ;
+			$.getJSON('https://commons.wikimedia.org/w/api.php?action=query&meta=userinfo&format=json',function(d){
+				if ( d.query.userinfo.id == 0 ) me.is_logged_in = false ;
+				else {
+					me.is_logged_in = true ;
+					me.userinfo = { // TODO
+						name:d.query.userinfo.name,
+						groups:[],
+						id:0,
+						rights:[]
+					} ;
+				}
+				callback() ;
+			});
 		} else {
 			me.getWSM ( {
 				action:'check'
