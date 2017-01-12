@@ -10,6 +10,17 @@ var wsm_comm = {
 	userinfo : {} ,
 	is_logged_in : false ,
 	oauth_uploader_login : false ,
+	
+	
+	init : function () {
+		var me = this ;
+		me.is_app = typeof navigator.connection != 'undefined' ;
+		$('#app_login_dialog').on('shown.bs.modal', function () {
+			$('#user_name').focus() ;
+			if ( me.hasKey('username') ) $('#user_name').val ( me.getValue('username') ) ;
+			if ( me.hasKey('password') ) $('#user_pass').val ( me.getValue('password') ) ;
+		} ) ;
+	} ,
 
 	
 	getWSM : function ( params , callback ) {
@@ -122,7 +133,7 @@ var wsm_comm = {
 							
 							$.post ( me.api_commons , {
 								action:'clientlogin',
-								OATHToken:tf_token,
+								token:tf_token,
 								username:name,
 								password:pass,
 //								logintoken:token,
@@ -155,11 +166,15 @@ var wsm_comm = {
 		
 		if ( typeof callback != 'undefined' ) {
 			// open dialog and ask for/check login
-			$('#app_login_dialog').modal ( {} ) ;
+			$('#app_login_dialog').modal ( {
+			} ) ;
 			$('#user_login').submit ( function (evt) {
 				evt.preventDefault();
 				var name = $('#user_name').val() ;
 				var pass = $('#user_pass').val() ;
+				
+				me.storeKey ( 'username' , $('#user_name').val() ) ;
+				me.storeKey ( 'password' , $('#user_pass').val() ) ;
 
 				me.commonsLogin ( name , pass , function ( d ) {
 					if ( typeof d == 'undefined' ) {
