@@ -1371,6 +1371,9 @@ var wikishootme = {
 			me.language = new_language ;
 			me.updateToCurrent() ;
 			$('#busy').hide() ;
+			if ( wsm_comm.is_app ) {
+				$('#interface_language_wrapper a').remove() ; // Remove globe icon for translation
+			}
 		} } ) ;
 
 	}
