@@ -204,7 +204,7 @@ var wikishootme = {
 		} else if ( entry.mode == 'wikidata' ) { // Wikidata, no image
 		
 			if ( entry.no_image ) {
-			} else if ( wsm_comm.isLoggedIn() ) {
+			} else if ( wsm_comm.isLoggedIn('commons') ) {
 				var desc = "{{Information\n|Description=[[d:" + entry.page + "|" + entry.label + "]]\n|Source=self-made\n|Date=\n|Author=[[User:"+wsm_comm.userinfo.name+"|]]\n|Permission=\n|other_versions=\n}}\n" ;
 				desc += "{{Object location|"+entry.pos[0]+"|"+entry.pos[1]+"}}\n<!--LOC-->\n\n" ;
 				desc += "=={{int:license-header}}==\n{{self|cc-by-sa-3.0}}" ;
@@ -230,7 +230,7 @@ var wikishootme = {
 			} else {
 			
 				if ( wsm_comm.is_app ) {
-					h += "<div><button class='btn btn-primary' onclick='wsm_comm.appLogin();return false'>Log in!</button></div>" ;
+					h += "<div><button class='btn btn-primary' onclick='wsm_comm.appLogin(\"commons\");return false'>Log in!</button></div>" ;
 				} else {
 					h += "<div>" ;
 					h += "<form method='post' action='" + wsm_comm.api_v3 + "'>" ;
@@ -255,7 +255,7 @@ var wikishootme = {
 		
 		h += "<div class='popup_coords'><span class='coordinates'>" + entry.pos[0] + ", " + entry.pos[1] + "</span>" ;
 		h += " <a style='user-select:none' href='http://www.instantstreetview.com/@"+entry.pos[0]+","+entry.pos[1]+",0h,0p,1z' tt_title='streetview' target='_blank'>&#127968;</a>" ;
-		if ( wsm_comm.isLoggedIn() ) {
+		if ( wsm_comm.isLoggedIn('wikidata') ) {
 			h += " [<a href='#' style='user-select:none' onclick='wikishootme.editCoordinates(this,\""+entry.page+"\","+entry.pos[0]+","+entry.pos[1]+");return false' title='edit coordinates'>e</a>]" ;
 		}
 		h += "</div>" ;

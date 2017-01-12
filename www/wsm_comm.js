@@ -9,6 +9,7 @@ var wsm_comm = {
 	
 	userinfo : {} ,
 	is_logged_in : false ,
+	logged_in : { commons:false , wikidata:false } ,
 	oauth_uploader_login : false ,
 	
 	
@@ -60,20 +61,28 @@ var wsm_comm = {
 		var me = this ;
 		
 		if ( me.is_app ) {
-			var api_url = me.api_wikidata ;
-			$.getJSON(api_url+'?action=query&meta=userinfo&format=json&callback=?',function(d){
-				if ( d.query.userinfo.id == 0 ) me.is_logged_in = false ;
-				else {
-					me.is_logged_in = true ;
-					me.userinfo = { // TODO
-						name:d.query.userinfo.name,
-						groups:[],
-						id:0,
-						rights:[]
-					} ;
-				}
+			var urls = { commons:me.api_commons , wikidata:me.api_wikidata } ;
+			var running = 2 ;
+			function fin () {
+				running-- ;
+				if ( running > 0 ) return ;
 				callback() ;
-			});
+			}
+			$.each ( urls , function ( site , api_url ) {
+				$.getJSON(api_url+'?action=query&meta=userinfo&format=json&callback=?',function(d){
+					if ( d.query.userinfo.id == 0 ) me.logged_in[site] = false ;
+					else {
+						me.logged_in[site] = true ;
+						me.userinfo = { // TODO
+							name:d.query.userinfo.name,
+							groups:[],
+							id:0,
+							rights:[]
+						} ;
+					}
+					fin() ;
+				});
+			} ) ;
 		} else {
 			me.getWSM ( {
 				action:'check'
@@ -189,16 +198,18 @@ var wsm_comm = {
 		} , 'json' ) . error ( function () { callback ( false ) } ) ;
 	} ,
 	
-	isLoggedIn : function ( callback ) {
+	isLoggedIn : function ( site , callback ) {
 		var me = this ;
-		if ( typeof callback == 'undefined' ) return me.is_logged_in ; // Just checking
+		if ( typeof callback == 'undefined' ) {
+			if ( me.is_app ) return me.logged_in[site] ;
+			return me.is_logged_in ; // Just checking
+		}
 		if ( !me.is_app ) return me.is_logged_in ; // Web browsed: We've already checked
-		if ( me.is_logged_in ) return true ; // Yes we are!
+		if ( me.is_logged_in || me.logged_in[site] ) return true ; // Yes we are!
 		
 		if ( typeof callback != 'undefined' ) {
 			// open dialog and ask for/check login
-			$('#app_login_dialog').modal ( {
-			} ) ;
+			$('#app_login_dialog').modal ( {} ) ;
 			$('#user_login').submit ( function (evt) {
 				evt.preventDefault();
 				var name = $('#user_name').val() ;
@@ -206,6 +217,8 @@ var wsm_comm = {
 				
 				me.storeKey ( 'username' , $('#user_name').val() ) ;
 				me.storeKey ( 'password' , $('#user_pass').val() ) ;
+
+				$('#app_login_dialog').modal('hide') ;
 
 				me.commonsLogin ( name , pass , function ( d ) {
 					if ( typeof d == 'undefined' || d === false ) {
@@ -218,12 +231,11 @@ var wsm_comm = {
 						id:0,
 						rights:[]
 					} ;
-					me.is_logged_in = true ;
-					alert ( name + " logged in!" ) ;
-					callback ( me.is_logged_in ) ;
+					if ( me.is_app ) me.logged_in[site] = true ;
+					else me.is_logged_in = true ;
+					callback ( true ) ;
 				} ) ;
 
-				$('#app_login_dialog').modal('hide') ;
 				return false ;
 			} ) ;
 		}
@@ -231,9 +243,9 @@ var wsm_comm = {
 		return false ;
 	} ,
 	
-	appLogin : function () {
-		this.isLoggedIn ( function ( is_logged_in ) {
-			if ( is_logged_in ) wikishootme.updateLayers() ;
+	appLogin : function ( site ) {
+		this.isLoggedIn ( site , function ( is_user_logged_in ) {
+			if ( is_user_logged_in ) wikishootme.updateLayers() ;
 		} ) ;
 		return false ;
 	} ,
