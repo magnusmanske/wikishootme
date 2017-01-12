@@ -135,11 +135,13 @@ var wsm_comm = {
 								action:'clientlogin',
 								logincontinue:1,
 								code:tf_token,
+								token:tf_token,
+								OATHToken:tf_token,
 //								username:name,
 //								password:pass,
 								logintoken:token,
 //								loginreturnurl:'https://some.where',
-//								rememberMe:1,
+								rememberMe:1,
 								format:'json'
 							} , function ( d3 ) {
 								alert ( JSON.stringify(d3) ) ;
