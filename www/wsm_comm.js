@@ -133,12 +133,13 @@ var wsm_comm = {
 							
 							$.post ( me.api_commons , {
 								action:'clientlogin',
-								token:tf_token,
-								username:name,
-								password:pass,
-//								logintoken:token,
-								loginreturnurl:'https://some.where',
-								rememberMe:1,
+								logincontinue:1,
+								code:tf_token,
+//								username:name,
+//								password:pass,
+								logintoken:token,
+//								loginreturnurl:'https://some.where',
+//								rememberMe:1,
 								format:'json'
 							} , function ( d3 ) {
 								alert ( JSON.stringify(d3) ) ;
