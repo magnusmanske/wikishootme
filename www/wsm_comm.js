@@ -109,10 +109,38 @@ var wsm_comm = {
 				password:pass,
 				logintoken:token,
 				loginreturnurl:'https://some.where',
+				rememberMe:1,
 				format:'json'
 			} , function ( d2 ) {
-				alert ( JSON.stringify(d2) ) ;
-				callback ( false ) ;
+			
+//				alert ( JSON.stringify(d2) ) ;
+				if ( d2.clientlogin.status == 'UI' ) {
+					$.each ( d2.clientlogin.requests , function ( dummy , r ) {
+						if ( r.id == 'TOTPAuthenticationRequest' ) {
+							var tf_token = prompt ( d2.clientlogin.message , '' ) ;
+							if ( tf_token == null || tf_token == '' ) return ; // No two-factor code given
+							
+							$.post ( me.api_commons , {
+								action:'clientlogin',
+								OATHToken:tf_token,
+								username:name,
+								password:pass,
+//								logintoken:token,
+								loginreturnurl:'https://some.where',
+								rememberMe:1,
+								format:'json'
+							} , function ( d3 ) {
+								alert ( JSON.stringify(d3) ) ;
+							} , 'json' ) ;
+							
+							
+							
+						}
+					} ) ;
+				} else {
+					callback ( false ) ; // FIXME
+				}
+			
 			} , 'json' ) ;
 		} , 'json' ) . error ( function () {
 			callback ( false ) ;
