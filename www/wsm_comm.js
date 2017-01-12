@@ -124,7 +124,10 @@ var wsm_comm = {
 				format:'json'
 			} , function ( d2 ) {
 			
-//				alert ( JSON.stringify(d2) ) ;
+				if ( d2.clientlogin.status == 'PASS' ) {
+					callback ( true ) ;
+					return ;
+				}
 				if ( d2.clientlogin.status == 'UI' ) {
 					$.each ( d2.clientlogin.requests , function ( dummy , r ) {
 						if ( r.id == 'TOTPAuthenticationRequest' ) {
@@ -134,31 +137,35 @@ var wsm_comm = {
 							$.post ( me.api_commons , {
 								action:'clientlogin',
 								logincontinue:1,
-								code:tf_token,
-								token:tf_token,
+//								code:tf_token,
+//								token:tf_token,
 								OATHToken:tf_token,
 //								username:name,
 //								password:pass,
 								logintoken:token,
 //								loginreturnurl:'https://some.where',
-								rememberMe:1,
+//								rememberMe:1,
 								format:'json'
 							} , function ( d3 ) {
+								if ( d3.clientlogin.status == 'PASS' ) {
+									callback ( true ) ;
+									return 
+								}
 								alert ( JSON.stringify(d3) ) ;
-							} , 'json' ) ;
-							
-							
-							
-						}
+								callback ( false ) ;
+							} , 'json' )  . error ( function () { callback ( false ) } ) ;
+						} else {
+							alert ( JSON.stringify(d2) ) ;
+ 							callback ( false ) ;
+ 						}
 					} ) ;
 				} else {
-					callback ( false ) ; // FIXME
+					alert ( JSON.stringify(d2) ) ;
+					callback ( false ) ;
 				}
 			
-			} , 'json' ) ;
-		} , 'json' ) . error ( function () {
-			callback ( false ) ;
-		} ) ;
+			} , 'json' )  . error ( function () { callback ( false ) } ) ;
+		} , 'json' ) . error ( function () { callback ( false ) } ) ;
 	} ,
 	
 	isLoggedIn : function ( callback ) {
@@ -180,7 +187,7 @@ var wsm_comm = {
 				me.storeKey ( 'password' , $('#user_pass').val() ) ;
 
 				me.commonsLogin ( name , pass , function ( d ) {
-					if ( typeof d == 'undefined' ) {
+					if ( typeof d == 'undefined' || d === false ) {
 						alert ( "Login failed" ) ;
 						return ;
 					}
@@ -191,7 +198,7 @@ var wsm_comm = {
 						rights:[]
 					} ;
 					me.is_logged_in = true ;
-					alert ( name + " pseudo-logged in!" ) ;
+					alert ( name + " logged in!" ) ;
 					callback ( me.is_logged_in ) ;
 				} ) ;
 
