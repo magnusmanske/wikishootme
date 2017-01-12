@@ -60,7 +60,8 @@ var wsm_comm = {
 		var me = this ;
 		
 		if ( me.is_app ) {
-			$.getJSON('https://commons.wikimedia.org/w/api.php?action=query&meta=userinfo&format=json',function(d){
+			var api_url = me.api_wikidata ;
+			$.getJSON(api_url+'?action=query&meta=userinfo&format=json&callback=?',function(d){
 				if ( d.query.userinfo.id == 0 ) me.is_logged_in = false ;
 				else {
 					me.is_logged_in = true ;
@@ -117,7 +118,17 @@ var wsm_comm = {
 	
 	commonsLogin : function ( name , pass , callback ) {
 		var me = this ;
-		$.get ( me.api_commons , {
+		me.wikimediaLogin ( me.api_commons , name , pass , callback ) ;
+	} ,
+	
+	wikidataLogin : function ( name , pass , callback ) {
+		var me = this ;
+		me.wikimediaLogin ( me.api_wikidata , name , pass , callback ) ;
+	} ,
+	
+	wikimediaLogin : function ( api_url , name , pass , callback ) {
+		var me = this ;
+		$.get ( api_url , {
 			action:'query',
 			meta:'tokens',
 			type:'login',
