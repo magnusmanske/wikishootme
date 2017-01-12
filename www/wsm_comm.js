@@ -104,10 +104,11 @@ var wsm_comm = {
 		} , function ( d ) {
 			var token = d.query.tokens.logintoken ; // TODO error handling
 			$.post ( me.api_commons , {
-				action:'login',
-				lgname:name,
-				lgpassword:pass,
-				lgtoken:token,
+				action:'clientlogin',
+				username:name,
+				password:pass,
+				logintoken:token,
+				loginreturnurl:'https://some.where',
 				format:'json'
 			} , function ( d2 ) {
 				alert ( JSON.stringify(d2) ) ;
