@@ -1254,11 +1254,6 @@ var wikishootme = {
 			if ( running > 0 ) return ;
 			me.tt.addILdropdown ( $('#interface_language_wrapper') ) ;
 			
-			var a = [] ;
-			a.push ( (wsm_comm.isLoggedIn('wikidata')?'L':'Not l')+'ogged into wikidata' ) ;
-			a.push ( (wsm_comm.isLoggedIn('commons')?'L':'Not l')+'ogged into commons' ) ;
-			alert ( a.join("\n") ) ;
-			
 			if ( isMobile() ) {
 				// Larger markers for fat thumbs
 				$.each ( me.marker_radius , function ( k , v ) {
@@ -1367,7 +1362,15 @@ var wikishootme = {
 		} ) ;
 		
 		// Load user status
-		wsm_comm.checkUserStatus ( function () { fin() } ) ;
+		wsm_comm.checkUserStatus ( function () {
+			var a = [] ;
+			a.push ( (wsm_comm.isLoggedIn('wikidata')?'L':'Not l')+'ogged into wikidata' ) ;
+			a.push ( (wsm_comm.isLoggedIn('commons')?'L':'Not l')+'ogged into commons' ) ;
+			alert ( a.join("\n") ) ;
+			fin() ;
+		} ) ;
+
+		
 		
 		// Load translation
 		me.tt = new ToolTranslation ( { tool: 'wikishootme' , fallback:'en' , callback : function () {
