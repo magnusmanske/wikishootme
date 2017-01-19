@@ -1363,10 +1363,10 @@ var wikishootme = {
 		
 		// Load user status
 		wsm_comm.checkUserStatus ( function () {
-			var a = [] ;
+/*			var a = [] ;
 			a.push ( (wsm_comm.isLoggedIn('wikidata')?'L':'Not l')+'ogged into wikidata' ) ;
 			a.push ( (wsm_comm.isLoggedIn('commons')?'L':'Not l')+'ogged into commons' ) ;
-			alert ( a.join("\n") ) ;
+			alert ( a.join("\n") ) ;*/
 			fin() ;
 		} ) ;
 
