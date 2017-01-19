@@ -1255,9 +1255,9 @@ var wikishootme = {
 			me.tt.addILdropdown ( $('#interface_language_wrapper') ) ;
 			
 			var a = [] ;
-			a.push (wsm_comm.isLoggedIn('wikidata')?'L':'Not l')+'ogged into wikidata' ) ;
+			a.push ( (wsm_comm.isLoggedIn('wikidata')?'L':'Not l')+'ogged into wikidata' ) ;
 			a.push ( (wsm_comm.isLoggedIn('commons')?'L':'Not l')+'ogged into commons' ) ;
-			alert ( a.join("<br/>\n") ) ;
+			alert ( a.join("\n") ) ;
 			
 			if ( isMobile() ) {
 				// Larger markers for fat thumbs
