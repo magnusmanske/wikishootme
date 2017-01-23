@@ -19,6 +19,7 @@ var wsm_comm = {
 
 		if ( me.is_app ) {
 			if ( me.hasKey('cookies') ) document.cookie = me.getValue('cookies') ;
+			alert ( document.cookie ) ;
 		}
 
 		$('#app_login_dialog').on('shown.bs.modal', function () {
@@ -185,6 +186,7 @@ var wsm_comm = {
 							} , function ( d3 ) {
 								if ( d3.clientlogin.status == 'PASS' ) {
 									me.storeKey ( 'cookies' , document.cookie ) ;
+									alert ( "Stored " + document.cookie ) ;
 									callback ( true ) ;
 									return 
 								}
