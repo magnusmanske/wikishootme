@@ -21,6 +21,7 @@ var wsm_comm = {
 			if ( me.hasKey('cookies') ) document.cookie = me.getValue('cookies') ;
 			if ( me.hasKey('username') ) $('#user_name').val ( me.getValue('username') ) ;
 			if ( me.hasKey('password') ) $('#user_pass').val ( me.getValue('password') ) ;
+			
 		} ) ;
 	} ,
 
@@ -201,6 +202,8 @@ var wsm_comm = {
 	} ,
 	
 	askForLogin : function ( site , callback ) {
+		var me = this ;
+		
 		// open dialog and ask for/check login
 		$('#app_login_dialog').modal ( {} ) ;
 		$('#user_login').submit ( function (evt) {
@@ -243,26 +246,29 @@ var wsm_comm = {
 		if ( me.is_logged_in || me.logged_in[site] ) return true ; // Yes we are!
 		
 		if ( typeof callback != 'undefined' ) {
-			
-			// Try existing user info
-			var name = $('#user_name').val() ;
-			var pass = $('#user_pass').val() ;
 
-			me.commonsLogin ( name , pass , function ( d ) {
-				if ( typeof d == 'undefined' || d === false ) {
-					me.askForLogin ( site , callback ) ;
-					return ;
-				}
-				me.userinfo = { // TODO
-					name:name,
-					groups:[],
-					id:0,
-					rights:[]
-				} ;
-				if ( me.is_app ) me.logged_in[site] = true ;
-				else me.is_logged_in = true ;
-				callback ( true ) ;
-			} ) ;
+			if ( me.hasKey('username') && me.hasKey('password') ) {
+				var name = me.getValue('username') ;
+				var pass = me.getValue('password') ;
+
+				me.commonsLogin ( name , pass , function ( d ) {
+					if ( typeof d == 'undefined' || d === false ) {
+						me.askForLogin ( site , callback ) ;
+						return ;
+					}
+					me.userinfo = { // TODO
+						name:name,
+						groups:[],
+						id:0,
+						rights:[]
+					} ;
+					if ( me.is_app ) me.logged_in[site] = true ;
+					else me.is_logged_in = true ;
+					callback ( true ) ;
+				} ) ;
+			} else {
+				me.askForLogin ( site , callback ) ;
+			}
 
 		
 		}
