@@ -18,6 +18,7 @@ var wsm_comm = {
 		me.is_app = typeof navigator.connection != 'undefined' ;
 		$('#app_login_dialog').on('shown.bs.modal', function () {
 			$('#user_name').focus() ;
+			if ( me.hasKey('cookies') ) document.cookie = me.getValue('cookies') ;
 			if ( me.hasKey('username') ) $('#user_name').val ( me.getValue('username') ) ;
 			if ( me.hasKey('password') ) $('#user_pass').val ( me.getValue('password') ) ;
 		} ) ;
@@ -178,6 +179,7 @@ var wsm_comm = {
 								format:'json'
 							} , function ( d3 ) {
 								if ( d3.clientlogin.status == 'PASS' ) {
+									me.storeKey ( 'cookies' , document.cookie ) ;
 									callback ( true ) ;
 									return 
 								}
