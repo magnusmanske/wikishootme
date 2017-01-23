@@ -24,7 +24,7 @@
 
 <script type='text/javascript'>
 
-var cnt = 2 ;
+var cnt = 1 ;
 function startApp () {
 	cnt-- ;
 	if ( cnt > 0 ) return ;
@@ -32,7 +32,7 @@ function startApp () {
 	wikishootme.init() ;
 }
 
-document.addEventListener("deviceready", startApp, true);
+//document.addEventListener("deviceready", startApp, true);
 $(document).ready ( function () { startApp() } ) ;
 
 /*
