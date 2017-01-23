@@ -23,10 +23,17 @@
 <script src="main_v3.js"></script>
 
 <script type='text/javascript'>
-$(document).ready ( function () {
+
+var cnt = 2 ;
+function startApp () {
+	cnt-- ;
+	if ( cnt > 0 ) return ;
 	wsm_comm.init() ;
 	wikishootme.init() ;
-} ) ;
+}
+
+document.addEventListener("deviceready", startApp, true);
+$(document).ready ( function () { startApp() } ) ;
 
 /*
 {

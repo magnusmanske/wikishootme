@@ -16,9 +16,13 @@ var wsm_comm = {
 	init : function () {
 		var me = this ;
 		me.is_app = typeof navigator.connection != 'undefined' ;
+
+		if ( me.is_app ) {
+			if ( me.hasKey('cookies') ) document.cookie = me.getValue('cookies') ;
+		}
+
 		$('#app_login_dialog').on('shown.bs.modal', function () {
 			$('#user_name').focus() ;
-			if ( me.hasKey('cookies') ) document.cookie = me.getValue('cookies') ;
 			if ( me.hasKey('username') ) $('#user_name').val ( me.getValue('username') ) ;
 			if ( me.hasKey('password') ) $('#user_pass').val ( me.getValue('password') ) ;
 			
