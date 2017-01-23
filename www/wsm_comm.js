@@ -200,6 +200,39 @@ var wsm_comm = {
 		} , 'json' ) . error ( function () { callback ( false ) } ) ;
 	} ,
 	
+	askForLogin : function ( site , callback ) {
+		// open dialog and ask for/check login
+		$('#app_login_dialog').modal ( {} ) ;
+		$('#user_login').submit ( function (evt) {
+			evt.preventDefault();
+			var name = $('#user_name').val() ;
+			var pass = $('#user_pass').val() ;
+			
+			me.storeKey ( 'username' , $('#user_name').val() ) ;
+			me.storeKey ( 'password' , $('#user_pass').val() ) ;
+
+			$('#app_login_dialog').modal('hide') ;
+
+			me.commonsLogin ( name , pass , function ( d ) {
+				if ( typeof d == 'undefined' || d === false ) {
+					alert ( "Login failed" ) ;
+					return ;
+				}
+				me.userinfo = { // TODO
+					name:name,
+					groups:[],
+					id:0,
+					rights:[]
+				} ;
+				if ( me.is_app ) me.logged_in[site] = true ;
+				else me.is_logged_in = true ;
+				callback ( true ) ;
+			} ) ;
+
+			return false ;
+		} ) ;
+	} ,
+	
 	isLoggedIn : function ( site , callback ) {
 		var me = this ;
 		if ( typeof callback == 'undefined' ) {
@@ -210,36 +243,28 @@ var wsm_comm = {
 		if ( me.is_logged_in || me.logged_in[site] ) return true ; // Yes we are!
 		
 		if ( typeof callback != 'undefined' ) {
-			// open dialog and ask for/check login
-			$('#app_login_dialog').modal ( {} ) ;
-			$('#user_login').submit ( function (evt) {
-				evt.preventDefault();
-				var name = $('#user_name').val() ;
-				var pass = $('#user_pass').val() ;
-				
-				me.storeKey ( 'username' , $('#user_name').val() ) ;
-				me.storeKey ( 'password' , $('#user_pass').val() ) ;
+			
+			// Try existing user info
+			var name = $('#user_name').val() ;
+			var pass = $('#user_pass').val() ;
 
-				$('#app_login_dialog').modal('hide') ;
-
-				me.commonsLogin ( name , pass , function ( d ) {
-					if ( typeof d == 'undefined' || d === false ) {
-						alert ( "Login failed" ) ;
-						return ;
-					}
-					me.userinfo = { // TODO
-						name:name,
-						groups:[],
-						id:0,
-						rights:[]
-					} ;
-					if ( me.is_app ) me.logged_in[site] = true ;
-					else me.is_logged_in = true ;
-					callback ( true ) ;
-				} ) ;
-
-				return false ;
+			me.commonsLogin ( name , pass , function ( d ) {
+				if ( typeof d == 'undefined' || d === false ) {
+					me.askForLogin ( site , callback ) ;
+					return ;
+				}
+				me.userinfo = { // TODO
+					name:name,
+					groups:[],
+					id:0,
+					rights:[]
+				} ;
+				if ( me.is_app ) me.logged_in[site] = true ;
+				else me.is_logged_in = true ;
+				callback ( true ) ;
 			} ) ;
+
+		
 		}
 		
 		return false ;
