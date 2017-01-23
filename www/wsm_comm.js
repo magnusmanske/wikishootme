@@ -19,7 +19,7 @@ var wsm_comm = {
 
 		if ( me.is_app ) {
 			if ( me.hasKey('cookies') ) document.cookie = me.getValue('cookies') ;
-			alert ( document.cookie ) ;
+//			alert ( document.cookie ) ;
 		}
 
 		$('#app_login_dialog').on('shown.bs.modal', function () {
@@ -185,12 +185,13 @@ var wsm_comm = {
 								format:'json'
 							} , function ( d3 ) {
 								if ( d3.clientlogin.status == 'PASS' ) {
+									alert ( JSON.stringify(d3) ) ;
 									me.storeKey ( 'cookies' , document.cookie ) ;
-									alert ( "Stored " + document.cookie ) ;
+//									alert ( "Stored " + document.cookie ) ;
 									callback ( true ) ;
-									return 
+									return ;
 								}
-								alert ( JSON.stringify(d3) ) ;
+//								alert ( JSON.stringify(d3) ) ;
 								callback ( false ) ;
 							} , 'json' )  . error ( function () { callback ( false ) } ) ;
 						} else {
