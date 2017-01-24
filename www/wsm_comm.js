@@ -18,6 +18,9 @@ var wsm_comm = {
 		me.is_app = typeof navigator.connection != 'undefined' ;
 
 		if ( me.is_app ) {
+			if ( typeof cordova != 'undefined' ) {
+				alert ( "Options: " + cordova.InAppBrowser.options ) ;
+			}
 			if ( me.hasKey('cookies') ) document.cookie = me.getValue('cookies') ;
 //			alert ( document.cookie ) ;
 		}
