@@ -386,7 +386,7 @@ var wikishootme = {
 		
 		// Uploading new file
 		var opts = {
-			url: me.api_v3,
+			url: wsm_comm.api_v3,
 			data: o.data,
 			cache: false,
 			contentType: false,
